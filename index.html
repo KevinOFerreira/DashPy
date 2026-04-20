@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel de Milhas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">✦</span>
+        <span class="logo-text">MilhasDash</span>
+      </div>
+      <div class="header-meta" id="header-meta">0 contas · 0 pts</div>
+      <button class="btn btn-primary" onclick="abrirModalConta()">+ Nova conta</button>
+    </div>
+  </header>
+
+  <!-- HERO SUMMARY -->
+  <section class="summary-section">
+    <div class="summary-grid" id="summary-grid">
+      <div class="summary-card">
+        <div class="summary-label">Contas ativas</div>
+        <div class="summary-value" id="s-contas">0</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Total de pontos</div>
+        <div class="summary-value" id="s-pts">0</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Total passageiros</div>
+        <div class="summary-value" id="s-pax">0</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Emissões realizadas</div>
+        <div class="summary-value" id="s-em">0</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEARCH -->
+  <div class="search-bar-wrap">
+    <input class="search-input" type="text" id="search-input" placeholder="Buscar conta ou programa..." oninput="renderCards()" />
+  </div>
+
+  <!-- CARDS GRID -->
+  <main class="main-wrap">
+    <div class="cards-grid" id="cards-grid">
+      <div class="empty-state" id="empty-state">
+        <div class="empty-icon">✦</div>
+        <div class="empty-title">Nenhuma conta ainda</div>
+        <div class="empty-sub">Clique em "Nova conta" para começar</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL CONTA -->
+  <div class="modal-overlay" id="modal-conta" onclick="fecharModalConta(event)">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-conta-title">Nova conta</div>
+        <button class="modal-close" onclick="fecharModalConta()">✕</button>
+      </div>
+      <div class="field"><label>Nome da conta</label><input type="text" id="f-nome" placeholder="Ex: João Silva" /></div>
+      <div class="field"><label>Programa</label><input type="text" id="f-prog" placeholder="Ex: Smiles, Latam Pass, TudoAzul..." /></div>
+      <div class="field-row">
+        <div class="field"><label>Passageiros disponíveis</label><input type="number" id="f-pax" placeholder="0" min="1" /></div>
+        <div class="field"><label>Pontos disponíveis</label><input type="number" id="f-pts" placeholder="0" min="0" /></div>
+      </div>
+      <div class="field"><label>Milheiro (R$)</label><input type="number" id="f-mil" placeholder="0,00" step="0.01" min="0" /></div>
+      <input type="hidden" id="f-edit-id" value="" />
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="fecharModalConta()">Cancelar</button>
+        <button class="btn btn-primary" onclick="salvarConta()">Salvar conta</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL EMISSÃO -->
+  <div class="modal-overlay" id="modal-emissao" onclick="fecharModalEmissao(event)">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Registrar emissão</div>
+        <button class="modal-close" onclick="fecharModalEmissao()">✕</button>
+      </div>
+      <div class="emissao-conta-info" id="emissao-conta-info"></div>
+      <input type="hidden" id="e-conta-id" />
+      <div class="field"><label>Localizador</label><input type="text" id="e-loc" placeholder="ABC123" style="text-transform:uppercase" /></div>
+      <div class="field-row">
+        <div class="field"><label>Passageiros utilizados</label><input type="number" id="e-pax" placeholder="0" min="1" /></div>
+        <div class="field"><label>Pontos utilizados</label><input type="number" id="e-pts" placeholder="0" min="0" /></div>
+      </div>
+      <div class="field"><label>Data da emissão</label><input type="date" id="e-data" /></div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="fecharModalEmissao()">Cancelar</button>
+        <button class="btn btn-primary" onclick="salvarEmissao()">Confirmar emissão</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL HISTÓRICO -->
+  <div class="modal-overlay" id="modal-historico" onclick="fecharModalHistorico(event)">
+    <div class="modal modal-wide">
+      <div class="modal-header">
+        <div class="modal-title" id="hist-title">Histórico de emissões</div>
+        <button class="modal-close" onclick="fecharModalHistorico()">✕</button>
+      </div>
+      <div id="hist-body"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
