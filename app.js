@@ -377,5 +377,39 @@ document.addEventListener('keydown', e => {
   }
 });
 
+// ── DADOS INICIAIS ──────────────────────────────────────────────────────
+const CONTAS_INICIAIS = [
+  { nome: 'Anna Laura Martins Santos',                    programa: 'LATAM_PASS', pontos: 160317, pax: 4,  milheiro: 17.45 },
+  { nome: 'Adriana Augusto Reigado',                      programa: 'LATAM_PASS', pontos: 140977, pax: 3,  milheiro: 22.38 },
+  { nome: 'Kêmily Raquel Ferreira do Carmo Silveira',     programa: 'LATAM_PASS', pontos: 122500, pax: 6,  milheiro: 16.35 },
+  { nome: 'Sara Ramos de Alencar',                        programa: 'LATAM_PASS', pontos: 113500, pax: 16, milheiro: 17.70 },
+  { nome: 'Noel Aparecido Dias',                          programa: 'LATAM_PASS', pontos: 103060, pax: 4,  milheiro: 20.70 },
+  { nome: 'Julio Cesar Lopes da Silva',                   programa: 'LATAM_PASS', pontos: 95434,  pax: 15, milheiro: 21.38 },
+  { nome: 'Rita de Cássia Barreto Campos de Oliveira',   programa: 'LATAM_PASS', pontos: 95243,  pax: 8,  milheiro: 16.22 },
+  { nome: 'Marcelo Onofre Aparecido da Cruz Junior',      programa: 'LATAM_PASS', pontos: 94700,  pax: 7,  milheiro: 19.90 },
+  { nome: 'Antonio Marcos de Andrade',                    programa: 'LATAM_PASS', pontos: 89489,  pax: 21, milheiro: 16.18 },
+  { nome: 'Júlia Maria Goes',                             programa: 'LATAM_PASS', pontos: 82468,  pax: 7,  milheiro: 23.13 },
+  { nome: 'Paulo Fernandes dos Santos Alves',             programa: 'LATAM_PASS', pontos: 79502,  pax: 8,  milheiro: 14.59 },
+  { nome: 'Edson Vieira Machado',                         programa: 'LATAM_PASS', pontos: 70500,  pax: 7,  milheiro: 22.79 },
+];
+
+function carregarDadosIniciais() {
+  const db = dbLoad();
+  if (db.contas.length === 0) {
+    db.contas = CONTAS_INICIAIS.map((c, i) => ({
+      id: (Date.now() + i).toString(),
+      nome: c.nome,
+      programa: c.programa,
+      pontos: c.pontos,
+      pax: c.pax,
+      milheiro: c.milheiro,
+      emissoes: [],
+      criadoEm: new Date().toISOString(),
+    }));
+    dbSave(db);
+  }
+}
+
 // ── INIT ────────────────────────────────────────────────────────────────
+carregarDadosIniciais();
 render();
