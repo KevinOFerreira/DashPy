@@ -112,6 +112,7 @@ function renderCards() {
       <div class="card-actions">
         <button class="btn btn-sm btn-green" onclick="abrirModalEmissao('${c.id}')">+ Emitir</button>
         <button class="btn btn-sm" onclick="abrirModalHistorico('${c.id}')">Histórico (${nEm})</button>
+        <button class="btn btn-sm btn-login" onclick="abrirModalLogin('${c.id}')">Login</button>
         <button class="btn btn-sm" onclick="abrirModalConta('${c.id}')">Editar</button>
         <button class="btn btn-sm btn-danger" onclick="excluirConta('${c.id}')">✕</button>
       </div>
@@ -294,10 +295,83 @@ function fecharModalHistorico(e) {
   document.getElementById('modal-historico').classList.remove('open');
 }
 
+// ── MODAL LOGIN ─────────────────────────────────────────────────────────
+function abrirModalLogin(id) {
+  const db = dbLoad();
+  const c  = db.contas.find(x => x.id === id);
+  if (!c) return;
+
+  document.getElementById('login-conta-id').value = id;
+  document.getElementById('login-modal-title').textContent = `Login · ${c.nome}`;
+  document.getElementById('login-conta-info').innerHTML =
+    `<strong>${c.nome}</strong> · ${c.programa}`;
+
+  const usuario = c.login_usuario || '';
+  const senha   = c.login_senha   || '';
+
+  document.getElementById('login-usuario-display').textContent = usuario || '—';
+  document.getElementById('login-senha-display').textContent   = senha ? '••••••••' : '—';
+  document.getElementById('login-usuario-input').value = usuario;
+  document.getElementById('login-senha-input').value   = senha;
+
+  // reset campos para modo visualização
+  ['usuario','senha'].forEach(f => {
+    document.getElementById(`login-${f}-input`).classList.add('hidden');
+    document.getElementById(`login-${f}-display`).classList.remove('hidden');
+    document.getElementById(`btn-edit-${f}`).textContent = '✎';
+  });
+
+  document.getElementById('modal-login').classList.add('open');
+}
+
+function fecharModalLogin(e) {
+  if (e && e.target !== document.getElementById('modal-login')) return;
+  document.getElementById('modal-login').classList.remove('open');
+}
+
+function toggleEditLogin(campo) {
+  const input   = document.getElementById(`login-${campo}-input`);
+  const display = document.getElementById(`login-${campo}-display`);
+  const btn     = document.getElementById(`btn-edit-${campo}`);
+  const editando = !input.classList.contains('hidden');
+
+  if (editando) {
+    // salva o valor digitado no display (mas não persiste ainda)
+    const val = input.value.trim();
+    display.textContent = campo === 'senha'
+      ? (val ? '••••••••' : '—')
+      : (val || '—');
+    input.classList.add('hidden');
+    display.classList.remove('hidden');
+    btn.textContent = '✎';
+  } else {
+    input.classList.remove('hidden');
+    display.classList.add('hidden');
+    btn.textContent = '✓';
+    setTimeout(() => input.focus(), 50);
+  }
+}
+
+function salvarLogin() {
+  const id      = document.getElementById('login-conta-id').value;
+  const usuario = document.getElementById('login-usuario-input').value.trim();
+  const senha   = document.getElementById('login-senha-input').value.trim();
+
+  const db = dbLoad();
+  const c  = db.contas.find(x => x.id === id);
+  if (!c) return;
+
+  c.login_usuario = usuario;
+  c.login_senha   = senha;
+  dbSave(db);
+  document.getElementById('modal-login').classList.remove('open');
+  toast('Credenciais salvas ✓');
+}
+
 // ── ATALHOS DE TECLADO ──────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
-    ['modal-conta','modal-emissao','modal-historico'].forEach(id => {
+    ['modal-conta','modal-emissao','modal-historico','modal-login'].forEach(id => {
       document.getElementById(id).classList.remove('open');
     });
   }
