@@ -123,24 +123,32 @@
         <button class="modal-close" onclick="fecharModalLogin()">✕</button>
       </div>
       <div class="login-conta-info" id="login-conta-info"></div>
+
+      <!-- USUÁRIO -->
       <div class="field">
         <label>Usuário
-          <button class="btn-edit-label" onclick="toggleEditLogin('usuario')" id="btn-edit-usuario" title="Editar usuário">✎</button>
+          <button class="btn-edit-label" onclick="toggleEditLogin('usuario')" id="btn-edit-usuario" title="Editar">✎</button>
         </label>
         <div class="login-field-wrap">
           <span class="login-val" id="login-usuario-display">—</span>
           <input type="text" id="login-usuario-input" class="login-input hidden" placeholder="Digite o usuário" />
+          <button class="btn-copy" onclick="copiarLogin('usuario')" title="Copiar usuário">⎘</button>
         </div>
       </div>
+
+      <!-- SENHA -->
       <div class="field">
         <label>Senha
-          <button class="btn-edit-label" onclick="toggleEditLogin('senha')" id="btn-edit-senha" title="Editar senha">✎</button>
+          <button class="btn-edit-label" onclick="toggleEditLogin('senha')" id="btn-edit-senha" title="Editar">✎</button>
         </label>
         <div class="login-field-wrap">
-          <span class="login-val" id="login-senha-display">••••••••</span>
+          <span class="login-val login-senha-mask" id="login-senha-display">—</span>
           <input type="password" id="login-senha-input" class="login-input hidden" placeholder="Digite a senha" />
+          <button class="btn-copy btn-eye" onclick="toggleVerSenha()" id="btn-ver-senha" title="Mostrar/ocultar senha">👁</button>
+          <button class="btn-copy" onclick="copiarLogin('senha')" title="Copiar senha">⎘</button>
         </div>
       </div>
+
       <input type="hidden" id="login-conta-id" />
       <div class="modal-actions">
         <button class="btn btn-ghost" onclick="fecharModalLogin()">Fechar</button>
