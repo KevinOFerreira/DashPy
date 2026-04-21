@@ -115,6 +115,40 @@
     </div>
   </div>
 
+  <!-- MODAL LOGIN -->
+  <div class="modal-overlay" id="modal-login" onclick="fecharModalLogin(event)">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="login-modal-title">Acesso à conta</div>
+        <button class="modal-close" onclick="fecharModalLogin()">✕</button>
+      </div>
+      <div class="login-conta-info" id="login-conta-info"></div>
+      <div class="field">
+        <label>Usuário
+          <button class="btn-edit-label" onclick="toggleEditLogin('usuario')" id="btn-edit-usuario" title="Editar usuário">✎</button>
+        </label>
+        <div class="login-field-wrap">
+          <span class="login-val" id="login-usuario-display">—</span>
+          <input type="text" id="login-usuario-input" class="login-input hidden" placeholder="Digite o usuário" />
+        </div>
+      </div>
+      <div class="field">
+        <label>Senha
+          <button class="btn-edit-label" onclick="toggleEditLogin('senha')" id="btn-edit-senha" title="Editar senha">✎</button>
+        </label>
+        <div class="login-field-wrap">
+          <span class="login-val" id="login-senha-display">••••••••</span>
+          <input type="password" id="login-senha-input" class="login-input hidden" placeholder="Digite a senha" />
+        </div>
+      </div>
+      <input type="hidden" id="login-conta-id" />
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="fecharModalLogin()">Fechar</button>
+        <button class="btn btn-primary" onclick="salvarLogin()">Salvar credenciais</button>
+      </div>
+    </div>
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>
