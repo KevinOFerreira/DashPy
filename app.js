@@ -310,7 +310,11 @@ function abrirModalLogin(id) {
   const senha   = c.login_senha   || '';
 
   document.getElementById('login-usuario-display').textContent = usuario || '—';
-  document.getElementById('login-senha-display').textContent   = senha ? '••••••••' : '—';
+  // senha: mostra os caracteres reais mascarados com •
+  document.getElementById('login-senha-display').textContent   = senha ? '•'.repeat(senha.length) : '—';
+  document.getElementById('login-senha-display').dataset.real  = senha;
+  document.getElementById('login-senha-display').dataset.visivel = 'false';
+
   document.getElementById('login-usuario-input').value = usuario;
   document.getElementById('login-senha-input').value   = senha;
 
@@ -320,8 +324,51 @@ function abrirModalLogin(id) {
     document.getElementById(`login-${f}-display`).classList.remove('hidden');
     document.getElementById(`btn-edit-${f}`).textContent = '✎';
   });
+  // reset olho
+  const olho = document.getElementById('btn-ver-senha');
+  if (olho) olho.textContent = '👁';
 
   document.getElementById('modal-login').classList.add('open');
+}
+
+function toggleVerSenha() {
+  const display = document.getElementById('login-senha-display');
+  const btn     = document.getElementById('btn-ver-senha');
+  const visivel = display.dataset.visivel === 'true';
+  const real    = display.dataset.real || '';
+
+  if (visivel) {
+    display.textContent      = real ? '•'.repeat(real.length) : '—';
+    display.dataset.visivel  = 'false';
+    btn.textContent          = '👁';
+  } else {
+    display.textContent      = real || '—';
+    display.dataset.visivel  = 'true';
+    btn.textContent          = '🙈';
+  }
+}
+
+function copiarLogin(campo) {
+  const db  = dbLoad();
+  const id  = document.getElementById('login-conta-id').value;
+  const c   = db.contas.find(x => x.id === id);
+  if (!c) return;
+
+  const valor = campo === 'usuario' ? (c.login_usuario || '') : (c.login_senha || '');
+  if (!valor) { toast('Nenhum valor para copiar'); return; }
+
+  navigator.clipboard.writeText(valor).then(() => {
+    toast(campo === 'usuario' ? 'Usuário copiado ✓' : 'Senha copiada ✓');
+  }).catch(() => {
+    // fallback para navegadores mais antigos
+    const tmp = document.createElement('input');
+    tmp.value = valor;
+    document.body.appendChild(tmp);
+    tmp.select();
+    document.execCommand('copy');
+    tmp.remove();
+    toast(campo === 'usuario' ? 'Usuário copiado ✓' : 'Senha copiada ✓');
+  });
 }
 
 function fecharModalLogin(e) {
